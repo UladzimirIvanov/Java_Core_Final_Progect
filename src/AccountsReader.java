@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class AccontsReader {
+public class AccountsReader {
     public void watchDataAccounts(){
         File file = new File("src\\Files\\Accounts.txt");
         //System.out.println(file.exists());

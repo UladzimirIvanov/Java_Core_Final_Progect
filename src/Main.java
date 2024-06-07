@@ -1,12 +1,3 @@
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class Main {
     public static void main(String[] args) {
         /*System.out.println("1. Вызов операции парсинга файлов перевода из input");
@@ -46,12 +37,16 @@ public class Main {
             accontsReader.watchDataAccounts();
         }*/
 
-        AccontsReader accontsReader = new AccontsReader();
+        AccountsReader accontsReader = new AccountsReader();
         accontsReader.watchDataAccounts();
         System.out.println();
         System.out.println();
 
-        FileParser fileParser = new FileParser();
-        fileParser.addRealAccountsAndCountsToMap();
+        AccountsForMap accountsForMap = new AccountsForMap();
+        //accountsForMap.addRealAccountsAndCountsToMap();
+
+        FileParser fileParser = new FileParser(accountsForMap.addRealAccountsAndCountsToMap());
+        fileParser.readInputFilesName();
+        fileParser.parsFile();
     }
 }
