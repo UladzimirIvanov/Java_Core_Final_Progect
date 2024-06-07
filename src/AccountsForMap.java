@@ -10,6 +10,7 @@ public class AccountsForMap {
     public HashMap<String, Integer> addRealAccountsAndCountsToMap(){
         StringBuilder sb = new StringBuilder();
         ArrayList<String> listAccounts = new ArrayList<>();
+        ArrayList<String> listAccounts2 = new ArrayList<>();
         HashMap<String, Integer> mapAccountsAndCounts = new HashMap<>();
 
         //Вычитывается файл с имеющимися счетами и суммами на них
@@ -24,6 +25,7 @@ public class AccountsForMap {
         //По этому паттерну в лист добавляются все счета и их суммы
         Pattern p = Pattern.compile("[0-9]{5}-[0-9]{5} \\| [0-9]*\\b");
         Matcher m = p.matcher(sb);
+
         while (m.find()){
             listAccounts.add(m.group());
         }

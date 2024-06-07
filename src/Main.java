@@ -1,3 +1,6 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         /*System.out.println("1. Вызов операции парсинга файлов перевода из input");
@@ -12,7 +15,7 @@ public class Main {
 
         while (true) {
             try {
-                System.out.println("Введите цифру от 1 до 2:");
+                System.out.println("Введите цифру от 1 до 3:");
                 userInput = new Scanner(System.in).nextInt();
                 if (userInput >= 1 && userInput <= 3) {
                     break;
@@ -27,13 +30,16 @@ public class Main {
         }
 
         if (userInput == PARS_FILE) {
-            System.out.println("Пока не работает");
+            AccountsForMap accountsForMap = new AccountsForMap();
+            FileParser fileParser = new FileParser(accountsForMap.addRealAccountsAndCountsToMap());
+            fileParser.readInputFilesName();
+            fileParser.parsFile();
         }
         if (userInput == REPORT_FILE) {
             System.out.println("Пока не работает");
         }
         if (userInput == ACCOUNTS_FILE) {
-            AccontsReader accontsReader = new AccontsReader();
+            AccountsReader accontsReader = new AccountsReader();
             accontsReader.watchDataAccounts();
         }*/
 
@@ -43,10 +49,14 @@ public class Main {
         System.out.println();
 
         AccountsForMap accountsForMap = new AccountsForMap();
-        //accountsForMap.addRealAccountsAndCountsToMap();
-
         FileParser fileParser = new FileParser(accountsForMap.addRealAccountsAndCountsToMap());
         fileParser.readInputFilesName();
         fileParser.parsFile();
+
     }
 }
+//TODO: исправить возможность уходить в минус
+//TODO: выводить инфу о непрошедшем переводе
+//TODO: перезаписывать файл с инфой о счетах
+//TODO: добавить обработку валидности файлов
+//TODO: добавить дату и время перевода
