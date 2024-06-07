@@ -46,33 +46,12 @@ public class Main {
             accontsReader.watchDataAccounts();
         }*/
 
-
-
-
-
-        StringBuilder sb = new StringBuilder();
-        ArrayList<String> list = new ArrayList<>();
-
-        try (FileReader stream = new FileReader("src\\Files\\Accounts.txt")){
-            int i;
-            while ((i = stream.read()) != -1){
-                sb.append((char)i);
-            }
-        } catch (IOException e){
-            System.out.println(e);
-        }
-
-        System.out.println(sb);
-
+        AccontsReader accontsReader = new AccontsReader();
+        accontsReader.watchDataAccounts();
+        System.out.println();
         System.out.println();
 
-        Pattern p = Pattern.compile("[0-9]{5}-[0-9]{5}");
-        Matcher m = p.matcher(sb);
-        while (m.find()){
-            list.add(m.group());
-        }
-
-        System.out.println();
-        System.out.println(list);
+        FileParser fileParser = new FileParser();
+        fileParser.addRealAccountsToMap();
     }
 }
