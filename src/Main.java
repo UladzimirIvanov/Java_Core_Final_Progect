@@ -52,6 +52,6 @@ public class Main {
         System.out.println();
 
         FileParser fileParser = new FileParser();
-        fileParser.addRealAccountsToMap();
+        fileParser.addRealAccountsAndCountsToMap();
     }
 }

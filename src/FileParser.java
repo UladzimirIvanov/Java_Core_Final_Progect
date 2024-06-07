@@ -2,18 +2,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileParser {
-    public ArrayList<String> addRealAccountsToMap(){
+    //Метод добавляет данные существующих счетов и их значения в мапу
+    public HashMap<String, Integer> addRealAccountsAndCountsToMap(){
         StringBuilder sb = new StringBuilder();
-        ArrayList<String> listAccountsNames = new ArrayList<>();
-        ArrayList<Integer> listAccountsCounts = new ArrayList<>();
+        ArrayList<String> listAccounts = new ArrayList<>();
+        HashMap<String, Integer> mapAccountsAndCounts = new HashMap<>();
 
+        //Вычитывается файл с имеющимися счетами и суммами на них
         try (FileReader stream = new FileReader("src\\Files\\Accounts.txt")){
             int i;
             while ((i = stream.read()) != -1){
@@ -22,47 +22,38 @@ public class FileParser {
         } catch (IOException e){
             System.out.println(e);
         }
-
+        //По этому паттерну в лист добавляются все счета и их суммы
         Pattern p = Pattern.compile("[0-9]{5}-[0-9]{5} \\| [0-9]*\\b");
         Matcher m = p.matcher(sb);
         while (m.find()){
-            listAccountsNames.add(m.group());
+            listAccounts.add(m.group());
         }
-
-        HashMap<String, Integer> map = new HashMap<>();
-        for (int i = 0; i < listAccountsNames.size(); i++) {
-            String forMap = listAccountsNames.get(i);
-            String[] forMap2 = forMap.split("\\|");
-            for (int j = 0; j < forMap2.length; j++) {
-                forMap2[j] = forMap2[j].trim();
+        //Перебирается лист, каждый элемент преобразуется в данные для мапы
+        for (int i = 0; i < listAccounts.size(); i++) {
+            String oneAccountAndCount = listAccounts.get(i);
+            String[] arrOneAccountAndCount = oneAccountAndCount.split("\\|");
+            for (int j = 0; j < arrOneAccountAndCount.length; j++) {
+                arrOneAccountAndCount[j] = arrOneAccountAndCount[j].trim();
             }
-            map.put(forMap2[0], Integer.valueOf(forMap2[1]));
+            mapAccountsAndCounts.put(arrOneAccountAndCount[0], Integer.valueOf(arrOneAccountAndCount[1]));
         }
-        System.out.println(map);
-        //System.out.println(listAccountsNames);
-        return listAccountsNames;
-
-        /*Pattern p = Pattern.compile("[0-9]{5}-[0-9]{5}");
-        Matcher m = p.matcher(sb);
-        while (m.find()){
-            listAccountsNames.add(m.group());
-        }
-        System.out.println(listAccountsNames);
-        return listAccountsNames;*/
+        System.out.println(mapAccountsAndCounts);
+        return mapAccountsAndCounts;
     }
 
-/*    public void readInputFilesName(){
+    //Метод просматривает каталог Input на наличие файлов
+    public void readInputFilesName(){
         File folder = new File("src\\Files\\Input");
         File[] files = folder.listFiles();
 
         for (int i = 0; i < files.length; i++) {
             if (files[i].isFile()){
                 System.out.println(files[i].getName());
-
             }
         }
     }
 
+    //Метод парсит файлы
     public void parsAndWork(){
         File folder = new File("src\\Files\\Input");
         File[] files = folder.listFiles();
@@ -93,6 +84,6 @@ public class FileParser {
         }
 
 
-    }*/
+    }
 
 }
