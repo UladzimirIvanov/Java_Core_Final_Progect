@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileParser {
-    HashMap<String, Integer> accountsMap;
+    public HashMap<String, Integer> accountsMap;
     public ArrayList<String> fileNamesInInputFolder = new ArrayList<>();
 
     public FileParser(HashMap<String, Integer> accountsMap) {
@@ -27,7 +27,7 @@ public class FileParser {
         }
     }
 
-    public void parsFile() {
+    public HashMap<String, Integer> parsFile() {
         String accountOne;
         String accountTwo;
         int value = 0;
@@ -97,5 +97,6 @@ public class FileParser {
             System.out.println(accountsMap);
             System.out.println();
         }
+        return accountsMap;
     }
 }

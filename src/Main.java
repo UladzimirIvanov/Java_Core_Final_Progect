@@ -1,8 +1,10 @@
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         /*System.out.println("1. Вызов операции парсинга файлов перевода из input");
         System.out.println("2. Вызов операции вывода списка всех переводов из файла-отчёта");
         System.out.println("3. Информация по счетам");
@@ -51,12 +53,15 @@ public class Main {
         AccountsForMap accountsForMap = new AccountsForMap();
         FileParser fileParser = new FileParser(accountsForMap.addRealAccountsAndCountsToMap());
         fileParser.readInputFilesName();
-        fileParser.parsFile();
+        HashMap<String,Integer> test = new HashMap<>(fileParser.parsFile());
+
+        AccountsWriter accountsWriter = new AccountsWriter(test);
+        accountsWriter.writeToAccountsFile();
 
     }
 }
+//TODO: перезаписывать файл с инфой о счетах
 //TODO: исправить возможность уходить в минус
 //TODO: выводить инфу о непрошедшем переводе
-//TODO: перезаписывать файл с инфой о счетах
-//TODO: добавить обработку валидности файлов
 //TODO: добавить дату и время перевода
+//TODO: добавить обработку валидности файлов
