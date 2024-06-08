@@ -53,15 +53,16 @@ public class Main {
         AccountsForMap accountsForMap = new AccountsForMap();
         FileParser fileParser = new FileParser(accountsForMap.addRealAccountsAndCountsToMap());
         fileParser.readInputFilesName();
-        HashMap<String,Integer> test = new HashMap<>(fileParser.parsFile());
+        HashMap<String,Integer> mapBackFileParser = new HashMap<>(fileParser.parsFile());
 
-        AccountsWriter accountsWriter = new AccountsWriter(test);
+        AccountsWriter accountsWriter = new AccountsWriter(mapBackFileParser);
         accountsWriter.writeToAccountsFile();
 
     }
 }
-//TODO: перезаписывать файл с инфой о счетах
-//TODO: исправить возможность уходить в минус
-//TODO: выводить инфу о непрошедшем переводе
+
 //TODO: добавить дату и время перевода
 //TODO: добавить обработку валидности файлов
+//TODO: реализовать файл отчёт
+//TODO: сделать перемещение обработанных файлов в архив
+

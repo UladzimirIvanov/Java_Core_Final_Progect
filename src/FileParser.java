@@ -30,7 +30,7 @@ public class FileParser {
     public HashMap<String, Integer> parsFile() {
         String accountOne;
         String accountTwo;
-        int value = 0;
+        int value;
         boolean flag = false;
         ArrayList<String> mapKeys = new ArrayList<>(accountsMap.keySet());
 
@@ -66,6 +66,10 @@ public class FileParser {
                 accountOne = arrOneOperation[0];
                 accountTwo = arrOneOperation[1];
                 value = Integer.parseInt(arrOneOperation[2]);
+                if (accountsMap.get(accountOne) < value){
+                    System.out.println(" | " + fileNamesInInputFolder.get(i).substring(15) + " | перевод со счёта " + accountOne + " на счёт " + accountTwo + " на сумму " + value + " не удался из-за недостатка средств");
+                    break;
+                }
 
                 for (int k = 0; k < mapKeys.size(); k++) {
                     if (accountOne.equals(mapKeys.get(k))) {
