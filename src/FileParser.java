@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -34,6 +36,12 @@ public class FileParser {
         boolean flag = false;
         ArrayList<String> mapKeys = new ArrayList<>(accountsMap.keySet());
 
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String formatDateTime = now.format(formatter);
+        System.out.println("After : " + formatDateTime);
+
+
         System.out.println("Мапа");
         System.out.println(accountsMap);
         System.out.println();
@@ -66,8 +74,8 @@ public class FileParser {
                 accountOne = arrOneOperation[0];
                 accountTwo = arrOneOperation[1];
                 value = Integer.parseInt(arrOneOperation[2]);
-                if (accountsMap.get(accountOne) < value){
-                    System.out.println(" | " + fileNamesInInputFolder.get(i).substring(15) + " | перевод со счёта " + accountOne + " на счёт " + accountTwo + " на сумму " + value + " не удался из-за недостатка средств");
+                if (accountsMap.get(accountOne) < value) {
+                    System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался из-за недостатка средств на счету");
                     break;
                 }
 
@@ -92,7 +100,7 @@ public class FileParser {
                 if (flag) {
                     accountsMap.replace(accountOne, accountsMap.get(accountOne) - value);
                     accountsMap.replace(accountTwo, accountsMap.get(accountTwo) + value);
-                    System.out.println(" | " + fileNamesInInputFolder.get(i).substring(15) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | успешно обработан");
+                    System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | успешно обработан");
                     flag = false;
                 }
             }
