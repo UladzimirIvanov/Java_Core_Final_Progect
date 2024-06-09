@@ -24,9 +24,9 @@ public class FileParser {
     //Метод просматривает каталог Input на наличие файлов и записывает их в лист
     public void readInputFilesName() {
         File folder = new File("src\\Files\\Input");
-        if (folder.isFile()) {
-            File[] files = folder.listFiles();
-            //String test = "inputFile_[0-9]*.txt";
+        File[] files = folder.listFiles();
+        System.out.println(files.length);
+        if (files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isFile()) {
                     //System.out.println(files[i].getName());
