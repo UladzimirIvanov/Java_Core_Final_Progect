@@ -1,6 +1,9 @@
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,18 +28,39 @@ public class FileParser {
     public void readInputFilesName() {
         File folder = new File("src\\Files\\Input");
         File[] files = folder.listFiles();
-        System.out.println(files.length);
         if (files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isFile()) {
                     //System.out.println(files[i].getName());
                     fileNamesInInputFolder.add(String.valueOf(files[i]));
+                    System.out.println(files[i]);
                 }
+                //System.out.println(files[i]);
+                /*if (files[i].getName().indexOf(inpFilterName) != -1) {
+                    files[i].renameTo(new File(folder, files.getName()));
+                }*/
+                //-------------------------------------------------------------------------
+
+                /*Path result = null;
+                try {
+                    result =  Files.move(Paths.get("src\\Files\\Input\\" + files[i].getName()), Paths.get("src\\Files\\Archive\\" + files[i].getName()));
+                } catch (IOException e) {
+                    System.out.println("Exception while moving file: " + e.getMessage());
+                }
+                if(result != null) {
+                    System.out.println("File moved successfully.");
+                }else{
+                    System.out.println("File movement failed.");
+                }*/
+
+
+                //-------------------------------------------------------------------------
             }
         }else {
             reportToFile = (formatDateTime + " | " +"Files not found\n");
             reportWriter.writeToReportFile(reportToFile);
         }
+
     }
 
     public HashMap<String, Integer> parsFile() {
@@ -53,6 +77,10 @@ public class FileParser {
         /*System.out.println("Мапа");
         System.out.println(accountsMap);
         System.out.println();*/
+
+
+
+
 
         for (int i = 0; i < fileNamesInInputFolder.size(); i++) {
             StringBuilder sb = new StringBuilder();

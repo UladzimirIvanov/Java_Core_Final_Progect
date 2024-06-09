@@ -53,6 +53,7 @@ public class Main {
 
         AccountsForMap accountsForMap = new AccountsForMap();
         FileParser fileParser = new FileParser(accountsForMap.addRealAccountsAndCountsToMap());
+
         fileParser.readInputFilesName();
         HashMap<String,Integer> mapBackFileParser = new HashMap<>(fileParser.parsFile());
 
