@@ -11,6 +11,11 @@ import java.util.regex.Pattern;
 public class FileParser {
     public HashMap<String, Integer> accountsMap;
     public ArrayList<String> fileNamesInInputFolder = new ArrayList<>();
+    public String reportToFile;
+    ReportWriter reportWriter = new ReportWriter();
+    LocalDateTime now = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    String formatDateTime = now.format(formatter);
 
     public FileParser(HashMap<String, Integer> accountsMap) {
         this.accountsMap = accountsMap;
@@ -19,20 +24,23 @@ public class FileParser {
     //Метод просматривает каталог Input на наличие файлов и записывает их в лист
     public void readInputFilesName() {
         File folder = new File("src\\Files\\Input");
-        File[] files = folder.listFiles();
-        //String test = "inputFile_[0-9]*.txt";
-
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].isFile()) {
-                //System.out.println(files[i].getName());
-                fileNamesInInputFolder.add(String.valueOf(files[i]));
+        if (folder.isFile()) {
+            File[] files = folder.listFiles();
+            //String test = "inputFile_[0-9]*.txt";
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isFile()) {
+                    //System.out.println(files[i].getName());
+                    fileNamesInInputFolder.add(String.valueOf(files[i]));
+                }
             }
+        }else {
+            reportToFile = (formatDateTime + " | " +"Files not found\n");
+            reportWriter.writeToReportFile(reportToFile);
         }
     }
 
     public HashMap<String, Integer> parsFile() {
-        String reportToFile;
-        ReportWriter reportWriter = new ReportWriter();;
+
 
         String accountOne;
         String accountTwo;
@@ -40,9 +48,7 @@ public class FileParser {
         boolean flag = false;
         ArrayList<String> mapKeys = new ArrayList<>(accountsMap.keySet());
 
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String formatDateTime = now.format(formatter);
+
 
         /*System.out.println("Мапа");
         System.out.println(accountsMap);
