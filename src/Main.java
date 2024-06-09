@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -47,8 +48,8 @@ public class Main {
 
         AccountsReader accontsReader = new AccountsReader();
         accontsReader.watchDataAccounts();
-        System.out.println();
-        System.out.println();
+        /*System.out.println();
+        System.out.println();*/
 
         AccountsForMap accountsForMap = new AccountsForMap();
         FileParser fileParser = new FileParser(accountsForMap.addRealAccountsAndCountsToMap());
@@ -58,10 +59,11 @@ public class Main {
         AccountsWriter accountsWriter = new AccountsWriter(mapBackFileParser);
         accountsWriter.writeToAccountsFile();
 
+
     }
 }
 
-//TODO: реализовать файл отчёт
+//TODO: исправить ошибку, если файлы отсутствуют в Input
 //TODO: сделать перемещение обработанных файлов в архив
 //TODO: добавить обработку валидности файлов
 

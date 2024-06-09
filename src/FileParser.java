@@ -20,6 +20,7 @@ public class FileParser {
     public void readInputFilesName() {
         File folder = new File("src\\Files\\Input");
         File[] files = folder.listFiles();
+        //String test = "inputFile_[0-9]*.txt";
 
         for (int i = 0; i < files.length; i++) {
             if (files[i].isFile()) {
@@ -30,6 +31,9 @@ public class FileParser {
     }
 
     public HashMap<String, Integer> parsFile() {
+        String reportToFile;
+        ReportWriter reportWriter = new ReportWriter();;
+
         String accountOne;
         String accountTwo;
         int value;
@@ -39,12 +43,11 @@ public class FileParser {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String formatDateTime = now.format(formatter);
-        System.out.println("After : " + formatDateTime);
 
-
-        System.out.println("Мапа");
+        /*System.out.println("Мапа");
         System.out.println(accountsMap);
-        System.out.println();
+        System.out.println();*/
+
         for (int i = 0; i < fileNamesInInputFolder.size(); i++) {
             StringBuilder sb = new StringBuilder();
             ArrayList<String> listWithInfFromFileInput = new ArrayList<>();
@@ -74,10 +77,7 @@ public class FileParser {
                 accountOne = arrOneOperation[0];
                 accountTwo = arrOneOperation[1];
                 value = Integer.parseInt(arrOneOperation[2]);
-                if (accountsMap.get(accountOne) < value) {
-                    System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался из-за недостатка средств на счету");
-                    break;
-                }
+
 
                 for (int k = 0; k < mapKeys.size(); k++) {
                     if (accountOne.equals(mapKeys.get(k))) {
@@ -86,6 +86,12 @@ public class FileParser {
                     } else {
                         flag = false;
                     }
+                }
+                if (!flag) {
+                    //System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался, так как счёт " + accountOne + " не найден в базе существующих счетов\n");
+                    reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался, так как счёт " + accountOne + " не найден в базе существующих счетов\n");
+
+                    reportWriter.writeToReportFile(reportToFile);
                 }
                 if (flag) {
                     for (int k = 0; k < mapKeys.size(); k++) {
@@ -96,18 +102,32 @@ public class FileParser {
                             flag = false;
                         }
                     }
+                    if (!flag) {
+                        //System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался, так как счёт " + accountTwo + " не найден в базе существующих счетов");
+                        reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался, так как счёт " + accountTwo + " не найден в базе существующих счетов\n");
+                        reportWriter.writeToReportFile(reportToFile);
+                    }
                 }
                 if (flag) {
+                    if (accountsMap.get(accountOne) < value) {
+                        //System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался из-за недостатка средств на счету");
+                        reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался из-за недостатка средств на счету\n");
+                        reportWriter.writeToReportFile(reportToFile);
+                        break;
+                    }
                     accountsMap.replace(accountOne, accountsMap.get(accountOne) - value);
                     accountsMap.replace(accountTwo, accountsMap.get(accountTwo) + value);
-                    System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | успешно обработан");
+                    //System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | успешно обработан");
+                    reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | успешно обработан\n");
+                    reportWriter.writeToReportFile(reportToFile);
                     flag = false;
                 }
             }
-            System.out.println();
+            /*System.out.println();
             System.out.println("Новая Мапа");
             System.out.println(accountsMap);
-            System.out.println();
+            System.out.println();*/
+
         }
         return accountsMap;
     }
