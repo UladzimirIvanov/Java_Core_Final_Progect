@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        /*System.out.println("1. Вызов операции парсинга файлов перевода из input");
+        System.out.println("1. Вызов операции парсинга файлов перевода из input");
         System.out.println("2. Вызов операции вывода списка всех переводов из файла-отчёта");
         System.out.println("3. Информация по счетам");
 
@@ -35,8 +35,11 @@ public class Main {
         if (userInput == PARS_FILE) {
             AccountsForMap accountsForMap = new AccountsForMap();
             FileParser fileParser = new FileParser(accountsForMap.addRealAccountsAndCountsToMap());
-            fileParser.readInputFilesName();
-            fileParser.parsFile();
+
+            HashMap<String,Integer> mapBackFileParser = new HashMap<>(fileParser.parsFile());
+
+            AccountsWriter accountsWriter = new AccountsWriter(mapBackFileParser);
+            accountsWriter.writeToAccountsFile();
         }
         if (userInput == REPORT_FILE) {
             System.out.println("Пока не работает");
@@ -44,24 +47,15 @@ public class Main {
         if (userInput == ACCOUNTS_FILE) {
             AccountsReader accontsReader = new AccountsReader();
             accontsReader.watchDataAccounts();
-        }*/
+        }
 
-        AccountsReader accountsReader = new AccountsReader();
-        accountsReader.watchDataAccounts();
 
-        AccountsForMap accountsForMap = new AccountsForMap();
-        FileParser fileParser = new FileParser(accountsForMap.addRealAccountsAndCountsToMap());
-
-        //fileParser.readInputFilesName();
-        HashMap<String,Integer> mapBackFileParser = new HashMap<>(fileParser.parsFile());
-
-        AccountsWriter accountsWriter = new AccountsWriter(mapBackFileParser);
-        accountsWriter.writeToAccountsFile();
 
 
     }
 }
 
+//TODO: добавить возможность читать отчёт из программы
 //TODO: исправить ошибку перемещения файлов в архив, если в архиве есть файлы с этим именем
 //TODO: добавить обработку валидности файлов
 

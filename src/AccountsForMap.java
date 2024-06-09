@@ -10,7 +10,6 @@ public class AccountsForMap {
     public HashMap<String, Integer> addRealAccountsAndCountsToMap(){
         StringBuilder sb = new StringBuilder();
         ArrayList<String> listAccounts = new ArrayList<>();
-        ArrayList<String> listAccounts2 = new ArrayList<>();
         HashMap<String, Integer> mapAccountsAndCounts = new HashMap<>();
 
         //Вычитывается файл с имеющимися счетами и суммами на них

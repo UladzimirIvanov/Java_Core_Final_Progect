@@ -1,22 +1,21 @@
 import java.io.File;
+import java.util.HashMap;
+import java.nio.file.Path;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.time.format.DateTimeFormatter;
 
 public class FileParser {
     public HashMap<String, Integer> accountsMap;
-    public ArrayList<String> fileNamesInInputFolder = new ArrayList<>();
     public String reportToFile;
     ReportWriter reportWriter = new ReportWriter();
+    public ArrayList<String> fileNamesInInputFolder = new ArrayList<>();
     LocalDateTime now = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     String formatDateTime = now.format(formatter);
@@ -33,27 +32,26 @@ public class FileParser {
         boolean flag = false;
         ArrayList<String> mapKeys = new ArrayList<>(accountsMap.keySet());
 
+        //Поиск файлов для обработки
         File folder = new File("src\\Files\\Input");
         File[] files = folder.listFiles();
         if (files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isFile()) {
-                    //System.out.println(files[i].getName());
                     fileNamesInInputFolder.add(String.valueOf(files[i]));
-                    System.out.println(files[i]);
                 }
-          }
-        }else {
-            reportToFile = (formatDateTime + " | " +"Files not found\n");
+            }
+        } else {
+            reportToFile = (formatDateTime + " | " + "Файл для парсинга не найден\n");
             reportWriter.writeToReportFile(reportToFile);
         }
 
-
-
+        //Начало поочерёдной обработки файлов
         for (int i = 0; i < fileNamesInInputFolder.size(); i++) {
             StringBuilder sb = new StringBuilder();
             ArrayList<String> listWithInfFromFileInput = new ArrayList<>();
 
+            //Вычитывание информации из файла и запись в StringBuilder
             try (FileReader stream = new FileReader(fileNamesInInputFolder.get(i))) {
                 int d;
                 while ((d = stream.read()) != -1) {
@@ -62,14 +60,15 @@ public class FileParser {
             } catch (IOException e) {
                 System.out.println(e);
             }
+
+            //Паттерн по которому полученный StringBuilder разбивается в лист
             Pattern p = Pattern.compile("[0-9]{5}-[0-9]{5} \\| [0-9]{5}-[0-9]{5} \\| [0-9]*\\b");
             Matcher m = p.matcher(sb);
             while (m.find()) {
                 listWithInfFromFileInput.add(m.group());
             }
-            //System.out.println(listWithInfFromFileInput);
 
-            //System.out.println("Обработака входящего файла: " + fileNamesInInputFolder.get(i).substring(15));
+            //Данные из листа заносятся в отдельные переменные для дальнейшей работы
             for (int j = 0; j < listWithInfFromFileInput.size(); j++) {
                 String oneOperation = listWithInfFromFileInput.get(j);
                 String[] arrOneOperation = oneOperation.split("\\|");
@@ -80,7 +79,7 @@ public class FileParser {
                 accountTwo = arrOneOperation[1];
                 value = Integer.parseInt(arrOneOperation[2]);
 
-
+                //Проверяю, есть ли полученный счёт отправителя из инпут файла в списке существующих счетов
                 for (int k = 0; k < mapKeys.size(); k++) {
                     if (accountOne.equals(mapKeys.get(k))) {
                         flag = true;
@@ -89,12 +88,14 @@ public class FileParser {
                         flag = false;
                     }
                 }
-                if (!flag) {
-                    //System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался, так как счёт " + accountOne + " не найден в базе существующих счетов\n");
-                    reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался, так как счёт " + accountOne + " не найден в базе существующих счетов\n");
 
+                //Если счёт не был найден, перевод не осуществился, записываю это в лог
+                if (!flag) {
+                    reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался, так как счёт " + accountOne + " не найден в базе существующих счетов\n");
                     reportWriter.writeToReportFile(reportToFile);
                 }
+
+                //Если счёт был найден, проверяется, есть ли счёт получателя из инпут файла в списке существующих счетов
                 if (flag) {
                     for (int k = 0; k < mapKeys.size(); k++) {
                         if (accountTwo.equals(mapKeys.get(k))) {
@@ -104,32 +105,32 @@ public class FileParser {
                             flag = false;
                         }
                     }
+
+                    //Если счёт не был найден, перевод не осуществился, записываю это в лог
                     if (!flag) {
-                        //System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался, так как счёт " + accountTwo + " не найден в базе существующих счетов");
                         reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался, так как счёт " + accountTwo + " не найден в базе существующих счетов\n");
                         reportWriter.writeToReportFile(reportToFile);
                     }
                 }
+
+                //Если оба счёта присутствуют в списке счетов, проверяю достаточно ли средств для перевода
                 if (flag) {
                     if (accountsMap.get(accountOne) < value) {
-                        //System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался из-за недостатка средств на счету");
                         reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался из-за недостатка средств на счету\n");
                         reportWriter.writeToReportFile(reportToFile);
                         break;
                     }
+
+                    //Если средст достаточно, выполняется перевод и информация записывается в лог
                     accountsMap.replace(accountOne, accountsMap.get(accountOne) - value);
                     accountsMap.replace(accountTwo, accountsMap.get(accountTwo) + value);
-                    //System.out.println(formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | успешно обработан");
                     reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | успешно обработан\n");
                     reportWriter.writeToReportFile(reportToFile);
                     flag = false;
                 }
             }
-            /*System.out.println();
-            System.out.println("Новая Мапа");
-            System.out.println(accountsMap);
-            System.out.println();*/
 
+            //Файлы из инпута перемещаются в архив с записю логов
             Path result = null;
             try {
                 result = Files.move(Paths.get("src\\Files\\Input\\" + files[i].getName()), Paths.get("src\\Files\\Archive\\" + files[i].getName()));
@@ -143,7 +144,6 @@ public class FileParser {
                 reportToFile = (formatDateTime + " | " + files[i].getName() + " | не уалось переместить в архив\n");
                 reportWriter.writeToReportFile(reportToFile);
             }
-
         }
         return accountsMap;
     }
