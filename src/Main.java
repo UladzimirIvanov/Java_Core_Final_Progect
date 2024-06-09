@@ -1,4 +1,3 @@
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -42,20 +41,16 @@ public class Main {
             accountsWriter.writeToAccountsFile();
         }
         if (userInput == REPORT_FILE) {
-            System.out.println("Пока не работает");
+            ReportReader reportReader = new ReportReader();
+            reportReader.watchDataReport();
         }
         if (userInput == ACCOUNTS_FILE) {
             AccountsReader accontsReader = new AccountsReader();
             accontsReader.watchDataAccounts();
         }
-
-
-
-
     }
 }
 
-//TODO: добавить возможность читать отчёт из программы
 //TODO: исправить ошибку перемещения файлов в архив, если в архиве есть файлы с этим именем
 //TODO: добавить обработку валидности файлов
 
