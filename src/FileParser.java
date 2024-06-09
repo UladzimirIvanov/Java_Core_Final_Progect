@@ -137,9 +137,11 @@ public class FileParser {
                 System.out.println("Exception while moving file: " + e.getMessage());
             }
             if (result != null) {
-                System.out.println("File moved successfully.");
+                reportToFile = (formatDateTime + " | " + files[i].getName() + " | перемещён в архив\n");
+                reportWriter.writeToReportFile(reportToFile);
             } else {
-                System.out.println("File movement failed.");
+                reportToFile = (formatDateTime + " | " + files[i].getName() + " | не уалось переместить в архив\n");
+                reportWriter.writeToReportFile(reportToFile);
             }
 
         }
