@@ -46,15 +46,13 @@ public class Main {
             accontsReader.watchDataAccounts();
         }*/
 
-        AccountsReader accontsReader = new AccountsReader();
-        accontsReader.watchDataAccounts();
-        /*System.out.println();
-        System.out.println();*/
+        AccountsReader accountsReader = new AccountsReader();
+        accountsReader.watchDataAccounts();
 
         AccountsForMap accountsForMap = new AccountsForMap();
         FileParser fileParser = new FileParser(accountsForMap.addRealAccountsAndCountsToMap());
 
-        fileParser.readInputFilesName();
+        //fileParser.readInputFilesName();
         HashMap<String,Integer> mapBackFileParser = new HashMap<>(fileParser.parsFile());
 
         AccountsWriter accountsWriter = new AccountsWriter(mapBackFileParser);

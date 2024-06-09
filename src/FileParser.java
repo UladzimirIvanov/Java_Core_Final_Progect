@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,8 +25,14 @@ public class FileParser {
         this.accountsMap = accountsMap;
     }
 
-    //Метод просматривает каталог Input на наличие файлов и записывает их в лист
-    public void readInputFilesName() {
+    public HashMap<String, Integer> parsFile() {
+
+        String accountOne;
+        String accountTwo;
+        int value;
+        boolean flag = false;
+        ArrayList<String> mapKeys = new ArrayList<>(accountsMap.keySet());
+
         File folder = new File("src\\Files\\Input");
         File[] files = folder.listFiles();
         if (files.length > 0) {
@@ -35,50 +42,11 @@ public class FileParser {
                     fileNamesInInputFolder.add(String.valueOf(files[i]));
                     System.out.println(files[i]);
                 }
-                //System.out.println(files[i]);
-                /*if (files[i].getName().indexOf(inpFilterName) != -1) {
-                    files[i].renameTo(new File(folder, files.getName()));
-                }*/
-                //-------------------------------------------------------------------------
-
-                /*Path result = null;
-                try {
-                    result =  Files.move(Paths.get("src\\Files\\Input\\" + files[i].getName()), Paths.get("src\\Files\\Archive\\" + files[i].getName()));
-                } catch (IOException e) {
-                    System.out.println("Exception while moving file: " + e.getMessage());
-                }
-                if(result != null) {
-                    System.out.println("File moved successfully.");
-                }else{
-                    System.out.println("File movement failed.");
-                }*/
-
-
-                //-------------------------------------------------------------------------
-            }
+          }
         }else {
             reportToFile = (formatDateTime + " | " +"Files not found\n");
             reportWriter.writeToReportFile(reportToFile);
         }
-
-    }
-
-    public HashMap<String, Integer> parsFile() {
-
-
-        String accountOne;
-        String accountTwo;
-        int value;
-        boolean flag = false;
-        ArrayList<String> mapKeys = new ArrayList<>(accountsMap.keySet());
-
-
-
-        /*System.out.println("Мапа");
-        System.out.println(accountsMap);
-        System.out.println();*/
-
-
 
 
 
@@ -161,6 +129,18 @@ public class FileParser {
             System.out.println("Новая Мапа");
             System.out.println(accountsMap);
             System.out.println();*/
+
+            Path result = null;
+            try {
+                result = Files.move(Paths.get("src\\Files\\Input\\" + files[i].getName()), Paths.get("src\\Files\\Archive\\" + files[i].getName()));
+            } catch (IOException e) {
+                System.out.println("Exception while moving file: " + e.getMessage());
+            }
+            if (result != null) {
+                System.out.println("File moved successfully.");
+            } else {
+                System.out.println("File movement failed.");
+            }
 
         }
         return accountsMap;
