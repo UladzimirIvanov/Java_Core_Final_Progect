@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         System.out.println("1. Вызов операции парсинга файлов перевода из input");
         System.out.println("2. Вызов операции вывода списка всех переводов из файла-отчёта");
-        System.out.println("3. Информация по счетам");
+        System.out.println("3. Информация о счетах");
 
         int PARS_FILE = 1;
         int REPORT_FILE = 2;
@@ -48,9 +48,9 @@ public class Main {
             AccountsReader accontsReader = new AccountsReader();
             accontsReader.watchDataAccounts();
         }
+        System.out.println("Работа программы завершена");
     }
 }
 
-//TODO: исправить ошибку перемещения файлов в архив, если в архиве есть файлы с этим именем
 //TODO: добавить обработку валидности файлов
 

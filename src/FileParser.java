@@ -19,6 +19,8 @@ public class FileParser {
     LocalDateTime now = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     String formatDateTime = now.format(formatter);
+    DateTimeFormatter formatterForSaveToArchive = DateTimeFormatter.ofPattern("ddMMyyyy_HH_mm_ss");
+    String formatDateTimeForSaveToArchive = now.format(formatterForSaveToArchive);
 
     public FileParser(HashMap<String, Integer> accountsMap) {
         this.accountsMap = accountsMap;
@@ -33,8 +35,9 @@ public class FileParser {
         ArrayList<String> mapKeys = new ArrayList<>(accountsMap.keySet());
 
         //Поиск файлов для обработки
-        File folder = new File("src\\Files\\Input");
+        File folder = new File("src\\Files\\Input\\");
         File[] files = folder.listFiles();
+
         if (files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isFile()) {
@@ -79,7 +82,7 @@ public class FileParser {
                 accountTwo = arrOneOperation[1];
                 value = Integer.parseInt(arrOneOperation[2]);
 
-                //Проверяю, есть ли полученный счёт отправителя из инпут файла в списке существующих счетов
+                //Проверяю, есть ли полученный счёт отправителя из инпут файла в списке существующих счетов (Accounts.txt)
                 for (int k = 0; k < mapKeys.size(); k++) {
                     if (accountOne.equals(mapKeys.get(k))) {
                         flag = true;
@@ -115,13 +118,14 @@ public class FileParser {
 
                 //Если оба счёта присутствуют в списке счетов, проверяю достаточно ли средств для перевода
                 if (flag) {
+                    //Если средств не достаточно, перевод не осуществился, записываю это в лог
                     if (accountsMap.get(accountOne) < value) {
                         reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался из-за недостатка средств на счету\n");
                         reportWriter.writeToReportFile(reportToFile);
                         break;
                     }
 
-                    //Если средст достаточно, выполняется перевод и информация записывается в лог
+                    //Если средств достаточно, выполняется перевод и информация записывается в лог
                     accountsMap.replace(accountOne, accountsMap.get(accountOne) - value);
                     accountsMap.replace(accountTwo, accountsMap.get(accountTwo) + value);
                     reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | успешно обработан\n");
@@ -133,7 +137,7 @@ public class FileParser {
             //Файлы из инпута перемещаются в архив с записю логов
             Path result = null;
             try {
-                result = Files.move(Paths.get("src\\Files\\Input\\" + files[i].getName()), Paths.get("src\\Files\\Archive\\" + files[i].getName()));
+                result = Files.move(Paths.get("src\\Files\\Input\\" + files[i].getName()), Paths.get("src\\Files\\Archive\\" + formatDateTimeForSaveToArchive + "_" + files[i].getName()));
             } catch (IOException e) {
                 System.out.println("Exception while moving file: " + e.getMessage());
             }
