@@ -1,3 +1,5 @@
+import Report.ReportWriter;
+
 import java.io.File;
 import java.util.HashMap;
 import java.nio.file.Path;
