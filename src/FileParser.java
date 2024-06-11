@@ -34,17 +34,19 @@ public class FileParser {
         boolean flag = false;
         ArrayList<String> mapKeys = new ArrayList<>(accountsMap.keySet());
 
-        //Поиск файлов для обработки
+        //Все файлы из папки Input добавляются в массив
         File folder = new File("src\\Files\\Input\\");
         File[] files = folder.listFiles();
 
-        if (files.length > 0) {
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].isFile()) {
-                    fileNamesInInputFolder.add(String.valueOf(files[i]));
-                }
+        //Перебераю массив, что бы найти .txt файлы, всё найденное закидываю в лист
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].getName().endsWith(".txt")) {
+                fileNamesInInputFolder.add(String.valueOf(files[i]));
             }
-        } else {
+        }
+
+        //Если лист пуст, запись в лог
+        if (fileNamesInInputFolder.isEmpty()) {
             reportToFile = (formatDateTime + " | " + "Файл для парсинга не найден\n");
             reportWriter.writeToReportFile(reportToFile);
         }
@@ -98,7 +100,7 @@ public class FileParser {
                     reportWriter.writeToReportFile(reportToFile);
                 }
 
-                //Если счёт был найден, проверяется, есть ли счёт получателя из инпут файла в списке существующих счетов
+                //Если счёт отправителя был найден, проверяется, есть ли счёт получателя из инпут файла в списке существующих счетов (Accounts.txt)
                 if (flag) {
                     for (int k = 0; k < mapKeys.size(); k++) {
                         if (accountTwo.equals(mapKeys.get(k))) {
@@ -137,15 +139,15 @@ public class FileParser {
             //Файлы из инпута перемещаются в архив с записю логов
             Path result = null;
             try {
-                result = Files.move(Paths.get("src\\Files\\Input\\" + files[i].getName()), Paths.get("src\\Files\\Archive\\" + formatDateTimeForSaveToArchive + "_" + files[i].getName()));
+                result = Files.move(Paths.get(fileNamesInInputFolder.get(i)), Paths.get("src\\Files\\Archive\\" + formatDateTimeForSaveToArchive + "_" + fileNamesInInputFolder.get(i).substring(16)));
             } catch (IOException e) {
                 System.out.println("Exception while moving file: " + e.getMessage());
             }
             if (result != null) {
-                reportToFile = (formatDateTime + " | " + files[i].getName() + " | перемещён в архив\n");
+                reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перемещён в архив\n");
                 reportWriter.writeToReportFile(reportToFile);
             } else {
-                reportToFile = (formatDateTime + " | " + files[i].getName() + " | не уалось переместить в архив\n");
+                reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | не уалось переместить в архив\n");
                 reportWriter.writeToReportFile(reportToFile);
             }
         }

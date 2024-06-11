@@ -37,7 +37,6 @@ public class AccountsForMap {
             }
             mapAccountsAndCounts.put(arrOneAccountAndCount[0], Integer.valueOf(arrOneAccountAndCount[1]));
         }
-        //System.out.println(mapAccountsAndCounts);
         return mapAccountsAndCounts;
     }
 }

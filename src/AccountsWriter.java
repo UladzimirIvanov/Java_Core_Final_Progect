@@ -9,6 +9,7 @@ public class AccountsWriter {
         this.accountsMap = accountsMap;
     }
 
+    //Метод редактирует файл со счетами и их суммами до актуального
     public void writeToAccountsFile() throws IOException {
         String oneMapKey = null;
         String oneMapValue = null;
