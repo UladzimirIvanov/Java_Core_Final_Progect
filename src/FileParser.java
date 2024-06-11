@@ -122,7 +122,7 @@ public class FileParser {
                     if (accountsMap.get(accountOne) < value) {
                         reportToFile = (formatDateTime + " | " + fileNamesInInputFolder.get(i).substring(16) + " | перевод с " + accountOne + " на " + accountTwo + " " + value + " | не удался из-за недостатка средств на счету\n");
                         reportWriter.writeToReportFile(reportToFile);
-                        break;
+                        continue;
                     }
 
                     //Если средств достаточно, выполняется перевод и информация записывается в лог
