@@ -151,6 +151,8 @@ public class FileParser {
                 reportWriter.writeToReportFile(reportToFile);
             }
         }
+        reportToFile = (formatDateTime + " | " + "парсинг файлов закончен\n");
+        reportWriter.writeToReportFile(reportToFile);
         return accountsMap;
     }
 }
